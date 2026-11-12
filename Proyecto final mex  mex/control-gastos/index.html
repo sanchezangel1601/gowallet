@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; connect-src 'self' https://open.er-api.com; img-src 'self' data:; style-src 'self'; script-src 'self'">
+<meta name="theme-color" content="#494be5">
+<meta name="description" content="Control Inteligente de Gastos: registra ingresos y egresos, offline.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png?v=gastos-v17">
+<link rel="apple-touch-icon" href="icons/icon-192.png?v=gastos-v17">
+<link rel="stylesheet" href="css/styles.css?v=gastos-v17">
+<title>GoWallet | Control de gastos</title>
+</head>
+<body class="locked">
+<section id="launchSplash" class="launch-splash" aria-hidden="true" hidden>
+  <div class="loader" role="status" aria-label="Cargando aplicación"></div>
+  <h1>GoWallet</h1>
+</section>
+<section id="authScreen" class="auth-screen" aria-label="Acceso a GoWallet">
+  <div class="auth-layout">
+    <aside class="auth-intro">
+      <a class="auth-brand" href="./" aria-label="GoWallet, inicio">
+        <img src="icons/icon-192.png" alt="">
+        <span>GoWallet</span>
+      </a>
+      <p class="auth-kicker"><span></span> CONTROL INTELIGENTE DE GASTOS</p>
+      <h1>Tus finanzas claras,<br><span>simples y bajo control.</span></h1>
+      <p class="auth-description">Registra tus ingresos y gastos, visualiza tu progreso y mantén tus datos seguros en este dispositivo.</p>
+      <div class="wallet-art" aria-hidden="true">
+        <span class="art-orbit orbit-one"></span><span class="art-orbit orbit-two"></span>
+        <span class="art-coin coin-one">$</span><span class="art-coin coin-two">$</span>
+        <img src="icons/icon-512.png" alt="">
+        <span class="art-sparkle sparkle-one">✦</span><span class="art-sparkle sparkle-two">✦</span>
+      </div>
+      <div class="auth-benefits" aria-label="Características">
+        <div><span class="benefit-icon benefit-green">＋</span><span><strong>Ingresos &amp; Egresos</strong><small>Registro rápido</small></span></div>
+        <div><span class="benefit-icon benefit-blue">▥</span><span><strong>Gráficos Claros</strong><small>Visualiza tus gastos</small></span></div>
+        <div><span class="benefit-icon benefit-yellow">⌑</span><span><strong>Respaldo Local</strong><small>Tus datos son tuyos</small></span></div>
+      </div>
+      <p class="auth-copyright">© GoWallet 2024 <span>•</span> Tu bienestar empieza con claridad.</p>
+    </aside>
+
+    <div class="auth-panel">
+      <div class="auth-card">
+        <div class="auth-mobile-brand">
+          <img src="icons/icon-192.png" alt="">
+          <span>GoWallet</span>
+        </div>
+        <div class="auth-tabs" role="tablist" aria-label="Acceso o registro">
+          <button class="auth-tab active" id="loginTab" type="button" role="tab" aria-selected="true" aria-controls="loginForm" data-auth-mode="login">Iniciar sesión</button>
+          <button class="auth-tab" id="registerTab" type="button" role="tab" aria-selected="false" aria-controls="registerForm" data-auth-mode="register">Registrarse</button>
+        </div>
+
+        <form id="loginForm" class="auth-form" novalidate>
+          <div class="auth-form-heading">
+            <h2>¡Bienvenido a GoWallet!</h2>
+            <p>Control Inteligente de Gastos</p>
+          </div>
+          <label class="auth-input"><span aria-hidden="true">♙</span><input id="loginIdentity" type="text" autocomplete="username" placeholder="Nombre de usuario o Email" aria-label="Nombre de usuario o correo electrónico" required></label>
+          <label class="auth-input"><span aria-hidden="true">⚿</span><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Contraseña" aria-label="Contraseña" required><button class="password-toggle" type="button" data-password-toggle="loginPassword" aria-label="Mostrar contraseña">Mostrar</button></label>
+          <button id="forgotPassword" class="forgot-password" type="button">¿Olvidaste tu contraseña?</button>
+          <p id="loginError" class="auth-error" role="alert"></p>
+          <button class="auth-submit" type="submit">Iniciar sesión</button>
+          <p class="auth-switch">¿Aún no tienes cuenta? <button type="button" data-auth-mode="register">Regístrate</button></p>
+          <p class="auth-footnote">Tus movimientos se guardan cifrados en este dispositivo.</p>
+        </form>
+
+        <form id="registerForm" class="auth-form" hidden novalidate>
+          <div class="auth-form-heading">
+            <h2>¡Únete a GoWallet!</h2>
+            <p>Crea tu cuenta para un control inteligente</p>
+          </div>
+          <label class="auth-input"><span aria-hidden="true">♙</span><input id="registerName" type="text" autocomplete="name" maxlength="60" placeholder="Nombre completo" aria-label="Nombre completo" required></label>
+          <label class="auth-input"><span aria-hidden="true">♙</span><input id="registerUsername" type="text" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9._\-]+" placeholder="Nombre de usuario" aria-label="Nombre de usuario" required></label>
+          <label class="auth-input"><span aria-hidden="true">✉</span><input id="registerEmail" type="email" autocomplete="email" maxlength="254" placeholder="Correo electrónico" aria-label="Correo electrónico" required></label>
+          <label class="auth-input"><span aria-hidden="true">⚿</span><input id="registerPassword" type="password" autocomplete="new-password" minlength="10" placeholder="Contraseña (mínimo 10 caracteres)" aria-label="Contraseña (mínimo 10 caracteres)" required><button class="password-toggle" type="button" data-password-toggle="registerPassword" aria-label="Mostrar contraseña">Mostrar</button></label>
+          <label class="auth-input"><span aria-hidden="true">⚿</span><input id="registerConfirm" type="password" autocomplete="new-password" minlength="10" placeholder="Confirmar contraseña" aria-label="Confirmar contraseña" required><button class="password-toggle" type="button" data-password-toggle="registerConfirm" aria-label="Mostrar contraseña">Mostrar</button></label>
+          <p id="registerError" class="auth-error" role="alert"></p>
+          <button class="auth-submit" type="submit">Registrarse</button>
+          <p class="auth-switch">¿Ya tienes cuenta? <button type="button" data-auth-mode="login">Iniciar sesión</button></p>
+          <p class="auth-footnote">Cuenta local. La contraseña cifra tus datos y no se puede recuperar.</p>
+        </form>
+      </div>
+      <p class="auth-legal">Registro de ingresos y egresos | Gráficos e informes<br>Almacenamiento local | Sincronización segura</p>
+    </div>
+  </div>
+</section>
+
+<aside class="desktop-sidebar" aria-label="Menú principal" hidden>
+  <div class="sidebar-heading">
+    <span class="brand-mark" aria-hidden="true">⌂</span>
+    <span class="sidebar-title">GoWallet</span>
+    <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Contraer menú" aria-expanded="true" aria-controls="desktopNav">‹</button>
+  </div>
+  <nav id="desktopNav" class="desktop-nav" aria-label="Navegación de escritorio">
+    <button class="nav-item active" type="button" data-view="home" aria-label="Inicio" aria-current="page"><span aria-hidden="true">⌂</span><span class="nav-label">Inicio</span></button>
+    <button class="nav-item" type="button" data-view="transactions" aria-label="Movimientos"><span aria-hidden="true">▤</span><span class="nav-label">Movimientos</span></button>
+    <button class="nav-item" type="button" data-view="new" aria-label="Nuevo movimiento"><span aria-hidden="true">＋</span><span class="nav-label">Nuevo movimiento</span></button>
+    <button class="nav-item" type="button" data-view="budget" aria-label="Presupuesto"><span aria-hidden="true">◉</span><span class="nav-label">Presupuesto</span></button>
+    <button class="nav-item" type="button" data-view="settings" aria-label="Ajustes"><span aria-hidden="true">⚙</span><span class="nav-label">Ajustes</span></button>
+  </nav>
+</aside>
+
+<header class="top" hidden>
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">⌂</span>
+    <div><h1>GoWallet</h1><span id="net" class="connection">● En línea</span></div>
+  </div>
+  <div class="actions">
+    <button id="btnInstall" class="install-button" hidden>Instalar app</button>
+    <button id="btnLock" class="lock-button" type="button" hidden>Bloquear datos</button>
+    <button id="avatar" class="avatar" type="button" aria-label="Perfil">A</button>
+  </div>
+</header>
+
+<main hidden>
+  <section id="view-home" class="view active" aria-label="Inicio">
+    <div class="welcome-row">
+      <div><p class="eyebrow">TU RESUMEN</p><h2 id="homeGreeting">Hola, bienvenida 👋</h2></div>
+      <label class="month-select">Mes <input id="month" type="month" aria-label="Mes"></label>
+    </div>
+
+    <section class="balance-card" aria-label="Balance disponible">
+      <div class="balance-heading"><span>Balance disponible</span><span class="balance-icon">◈</span></div>
+      <strong id="sumBal">$0.00</strong>
+      <small id="usd" class="exchange-value"></small>
+      <div class="balance-stats">
+        <div><span class="stat-icon income-icon">↙</span><span>Ingresos</span><strong id="sumIn">$0.00</strong></div>
+        <div><span class="stat-icon expense-icon">↗</span><span>Egresos</span><strong id="sumOut">$0.00</strong></div>
+      </div>
+    </section>
+
+    <section class="panel budget-card">
+      <div class="section-heading"><div><p class="eyebrow">CONTROL MENSUAL</p><h2>Presupuesto mensual</h2></div><span class="safe-pill">● Seguimiento</span></div>
+      <div class="budget-summary"><strong id="budgetTxt">Define un presupuesto mensual.</strong><span id="budgetPct">0%</span></div>
+      <progress id="budgetProgress" max="100" value="0" aria-label="Uso del presupuesto mensual">0%</progress>
+      <div class="budget-foot"><span>Gastado este mes</span><button class="text-button" type="button" data-go="budget">Ajustar presupuesto</button></div>
+    </section>
+
+    <div class="section-heading category-heading"><div><p class="eyebrow">EN QUÉ GASTAS</p><h2>Gastos por categoría</h2></div><button class="text-button" type="button" data-go="transactions">Ver movimientos</button></div>
+    <section class="panel chart-panel">
+      <div class="chartwrap"><canvas id="chart" width="300" height="300" aria-label="Gráfico de egresos por categoría" role="img"></canvas><ul id="legend"></ul></div>
+    </section>
+
+    <div class="section-heading recent-heading"><div><p class="eyebrow">ACTIVIDAD</p><h2>Últimos movimientos</h2></div><button class="text-button" type="button" data-go="transactions">Ver todos</button></div>
+    <section class="panel recent-panel"><ul id="recentList" class="list recent-list"></ul><p id="recentEmpty" class="muted">Aún no tienes movimientos.</p></section>
+  </section>
+
+  <section id="view-transactions" class="view" aria-label="Movimientos" hidden>
+    <div class="page-heading"><p class="eyebrow">TU ACTIVIDAD</p><h2>Movimientos</h2><p>Consulta, edita o elimina tus registros.</p></div>
+    <section class="panel">
+      <div class="row between"><h2>Todos los movimientos</h2></div>
+      <ul id="list" class="list"></ul>
+      <p id="empty" class="muted">Sin movimientos este mes.</p>
+    </section>
+  </section>
+
+  <section id="view-new" class="view" aria-label="Nuevo movimiento" hidden>
+    <div class="page-heading"><p class="eyebrow">REGISTRO</p><h2 id="formTitle">Nuevo movimiento</h2><p>Agrega los detalles para mantener tus cuentas al día.</p></div>
+    <section class="panel form-panel">
+      <form id="form" novalidate>
+        <input type="hidden" id="id">
+        <label>Tipo de movimiento
+          <select id="type"><option value="egreso">Gasto</option><option value="ingreso">Ingreso</option></select>
+        </label>
+        <label>Monto (MXN)
+          <input id="amount" type="number" step="0.01" min="0.01" max="9999999" inputmode="decimal" placeholder="0.00" required>
+        </label>
+        <label>Categoría
+          <select id="category"></select>
+        </label>
+        <label>Descripción
+          <input id="desc" type="text" maxlength="60" placeholder="Ej. Compra del supermercado" required>
+        </label>
+        <label>Fecha
+          <input id="date" type="date" required>
+        </label>
+        <p id="err" class="error" role="alert"></p>
+        <div class="form-actions">
+          <button type="submit" class="primary" id="btnSave">Guardar movimiento</button>
+          <button type="button" id="btnCancel" hidden>Cancelar</button>
+        </div>
+        <p class="form-note">Tus datos se guardan en este dispositivo.</p>
+      </form>
+    </section>
+  </section>
+
+  <section id="view-budget" class="view" aria-label="Presupuesto" hidden>
+    <div class="page-heading"><p class="eyebrow">PLANIFICACIÓN</p><h2>Tu presupuesto</h2><p>Define un límite mensual y recibe alertas para cuidar tus gastos.</p></div>
+    <section class="panel settings-panel">
+      <label>Presupuesto mensual (MXN)
+        <input id="budget" type="number" min="0" step="1" placeholder="Ej. 5000" aria-label="Presupuesto mensual">
+      </label>
+      <button id="btnBudget" class="primary">Guardar presupuesto</button>
+      <div class="budget-detail">
+        <div class="section-heading"><h2>Uso del presupuesto</h2><span id="budgetPctDetail">0%</span></div>
+        <progress id="budgetProgressDetail" max="100" value="0" aria-label="Uso del presupuesto mensual">0%</progress>
+        <small id="budgetDetailText" class="muted">Define un presupuesto mensual.</small>
+      </div>
+      <button id="btnNotif" class="secondary-button">Activar alertas</button>
+    </section>
+  </section>
+
+  <section id="view-settings" class="view" aria-label="Ajustes" hidden>
+    <div class="page-heading"><p class="eyebrow">PREFERENCIAS</p><h2>Ajustes y respaldo</h2><p>Sincroniza la moneda y administra una copia de tus datos.</p></div>
+    <section class="panel settings-panel">
+      <h2>Tipo de cambio</h2>
+      <p id="syncTxt" class="muted">Consultando tipo de cambio…</p>
+      <button id="btnSync" class="secondary-button">Actualizar tipo de cambio</button>
+      <div class="settings-divider"></div>
+      <h2>Respaldo de datos</h2>
+      <p id="localBackupStatus" class="muted">La copia local se actualiza al guardar cambios.</p>
+      <p class="muted">Se conserva cifrada en este dispositivo. Para recuperarla en otro dispositivo, descarga una copia JSON.</p>
+      <div class="backup-actions">
+        <button id="btnRestoreLocalBackup" class="secondary-button" type="button" disabled>Restaurar copia local</button>
+      </div>
+      <div class="settings-divider"></div>
+      <h2>Copia para otro dispositivo</h2>
+      <p class="muted">Descarga o importa una copia cifrada.</p>
+      <div class="backup-actions">
+        <button id="btnExport" class="secondary-button">Descargar respaldo cifrado</button>
+        <label class="filebtn">Importar JSON<input id="fileImport" type="file" accept="application/json" hidden></label>
+      </div>
+      <div class="settings-divider"></div>
+      <button id="btnShare" class="text-button">Compartir resumen mensual</button>
+    </section>
+  </section>
+</main>
+
+<nav class="bottom-nav" aria-label="Navegación principal" hidden>
+  <button class="nav-item active" type="button" data-view="home" aria-current="page"><span aria-hidden="true">⌂</span><span class="nav-label">Inicio</span></button>
+  <button class="nav-item" type="button" data-view="transactions"><span aria-hidden="true">▤</span><span class="nav-label">Movimientos</span></button>
+  <button class="nav-item nav-new" type="button" data-view="new"><span aria-hidden="true">＋</span><span class="nav-label">Nuevo</span></button>
+  <button class="nav-item" type="button" data-view="budget"><span aria-hidden="true">◉</span><span class="nav-label">Presupuesto</span></button>
+  <button class="nav-item" type="button" data-view="settings"><span aria-hidden="true">⚙</span><span class="nav-label">Ajustes</span></button>
+</nav>
+<dialog id="backupPasswordDialog" class="backup-dialog">
+  <form id="backupPasswordForm" novalidate>
+    <h2>Descifrar respaldo</h2>
+    <p>Escribe la contraseña con la que se exportó este archivo.</p>
+    <label for="backupPassword">Contraseña del respaldo
+      <input id="backupPassword" type="password" autocomplete="current-password" required>
+    </label>
+    <p id="backupPasswordError" class="error" role="alert"></p>
+    <div class="dialog-actions">
+      <button id="btnBackupCancel" class="secondary-button" type="button">Cancelar</button>
+      <button class="primary" type="submit">Importar respaldo</button>
+    </div>
+  </form>
+</dialog>
+<div id="toast" role="status"></div>
+<script type="module" src="js/app.js?v=gastos-v17"></script>
+</body>
+</html>
